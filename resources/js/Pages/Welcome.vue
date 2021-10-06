@@ -102,5 +102,5 @@ export default {
         laravelVersion: String,
         phpVersion: String,
     },
-}
+};
 </script>

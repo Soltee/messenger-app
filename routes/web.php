@@ -4,16 +4,10 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+use App\Http\Controllers\User\DashboardController;
+use App\Http\Controllers\User\RoomController;
+use App\Http\Controllers\User\MessageController;
+
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -24,8 +18,20 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+//Authenticated
+Route::group(['middleware' => ['auth', 'verified']], function(){
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+                                ->name('dashboard');
+
+    //Room
+    Route::get('/rooms/{room}', [RoomController::class, 'show'])
+                                ->name('room');
+
+    //Messages
+    Route::get('/messages', [MessageController::class, 'index']);
+    Route::post('/messages', [MessageController::class, 'store']);
+
+});
+
 
 require __DIR__.'/auth.php';
