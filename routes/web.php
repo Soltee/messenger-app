@@ -4,18 +4,23 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\User\RoomController;
 use App\Http\Controllers\User\MessageController;
 
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
+Route::group(['middleware' => 'guest'], function(){
+    Route::get('/', [WelcomeController::class, 'index'])
+                    ->name('welcome');
+
+    //Authentication Routes
+    Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+    Route::post('/signup', [RegisteredUserController::class, 'store']);
+
 });
 
 //Authenticated

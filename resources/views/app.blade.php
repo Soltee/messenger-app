@@ -18,7 +18,9 @@
         <script src="{{ mix('js/app.js') }}" defer></script>
     </head>
     <body class="font-sans antialiased">
+        @include('sweetalert::alert')
         @inertia
+
 
         @env ('local')
             <script src="http://localhost:8080/js/bundle.js"></script>
