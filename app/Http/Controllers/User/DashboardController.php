@@ -15,6 +15,7 @@ class DashboardController extends Controller
     */
     public function index()
     {
+
         return Inertia::render('Dashboard', [
             'authenicated'   => auth()->user(),
             'rooms'          => Room::latest()
@@ -27,7 +28,25 @@ class DashboardController extends Controller
                                             'user'       => $r->user,
                                             'name'       => $r->name,
                                             'slug'       => $r->slug,
-                                            'messages'   => $r->messages_count,
+                                            'users'      => $r
+                                                            ->joinedByUsers()
+                                                            ->count(),
+                                            'created'    => $r->created_at
+                                        ];
+                                    }),
+            'joinedRooms'   => auth()
+                                ->user()
+                                ->joinedRooms()
+                                ->take(10)
+                                ->get()
+                                ->transform(function($r) {
+                                        return [
+                                            'id'         => $r->id,
+                                            'name'       => $r->name,
+                                            'slug'       => $r->slug,
+                                            'users'      => $r
+                                                            ->joinedByUsers()
+                                                            ->count(),
                                             'created'    => $r->created_at
                                         ];
                                     })

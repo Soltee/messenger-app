@@ -17,4 +17,30 @@ class Room extends Model
     {
         return $this->hasMany(Message::class);
     }
+
+    public function joinedByUsers()
+    {
+        return $this->belongsToMany(User::class, 'room_user')
+            ->withTimestamps();
+    }
+
+    /**
+     * Join a chat room
+     * 
+     * @param \App\User $user
+     */
+    public function join(User $user)
+    {
+        return $this->joinedByUsers()->attach($user);
+    }
+
+    /**
+     * Leave a chat room
+     * 
+     * @param \App\User $user
+     */
+    public function leave(User $user)
+    {
+        return $this->joinedRooms()->detach($user);
+    }
 }

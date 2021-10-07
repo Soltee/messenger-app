@@ -13,7 +13,12 @@
                 <div class=" overflow-hidden">
                     <div class="flex flex-col justify-center py-3">
                         <div v-if="sending">
-                                Sending .........
+                            <svg 
+                                xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin: auto;  none repeat scroll 0% 0%; display: block; shape-rendering: auto; padding:0;" width="36px" height="36px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+                                <circle cx="50" cy="50" fill="none" stroke="#f8f8fc" stroke-width="10" r="35" stroke-dasharray="164.93361431346415 56.97787143782138">
+                                  <animateTransform attributeName="transform" type="rotate" repeatCount="indefinite" dur="1s" values="0 50 50;360 50 50" keyTimes="0;1"></animateTransform>
+                                </circle>
+                            </svg>
                         </div>
 
 
@@ -84,14 +89,7 @@ export default {
             this.newMessagesArray.push(m);
         });
 
-        this.setUpEcho();
-
-
-        // Echo.private(`rooms.${this.room.id}`)
-        //     .listen('MessageSentEvent', (message) => {
-        //         console.log(e);
-        //         this.newMessagesArray.push(message);
-        // });
+        // this.setUpEcho();
     },
     methods:{
         sendMessage(){
@@ -111,14 +109,23 @@ export default {
                 this.newMessage  = '';
                 this.sending     = false;
                 if(res.status == 201){
-                    // console.log(res.data);
                     this.setUpEcho();
-                    // this.messagesArray.push(res.data.newMessage);
                 }
             }).catch(err => {
                 this.newMessage   = '';
                 this.sending      = false;
-                // console.log(err);
+            });
+        },
+        joinChat(){
+            axios.post('/join', {
+                room   : this.room.id
+            }).catch(res => {
+                this.$swal(
+                  'Joined!',
+                  'success'
+                )
+            }).catch(err => {
+                this.$swal('Server error.', 'error');
             });
         },
         setUpEcho(){

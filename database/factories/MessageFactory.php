@@ -33,7 +33,9 @@ class MessageFactory extends Factory
                 $room   = Room::inRandomOrder()->pluck('id')->toArray();
                 return Arr::random($room);
             },
-            'message'   => $this->faker->text(500)
+            'message'   => function(){
+                return $this->faker->text(Arr::random([200,300,400,250,500,100]));
+            }
         ];
     }
 }

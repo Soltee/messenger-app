@@ -13,5 +13,5 @@ export default {
             this.$refs.input.focus()
         }
     }
-}
+};
 </script>

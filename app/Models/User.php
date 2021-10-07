@@ -50,4 +50,33 @@ class User extends Authenticatable
     public function rooms() {
         return $this->hasMany(Room::class);
     }
+
+    public function joinedRooms()
+    {
+        return $this->belongsToMany(Room::class, 'room_user')
+                ->withTimestamps();
+    }
+
+    /**
+     * Join a new room
+     * 
+     * @param \App\Room $room
+     */
+    public function joinRoom(Room $room)
+    {
+        return $this->joinedRooms()->attach($room);
+    }
+
+    /**
+    * Check if user has joined room
+     * 
+     * @param mixed $roomId
+     * 
+     * @return bool
+     */
+    public function hasJoined($roomId)
+    {
+        return $this->joinedRooms->where('id', $roomId)->firstOrfail() 
+                    ? true : false;
+    }
 }

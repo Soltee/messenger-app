@@ -17,9 +17,11 @@ class RoomController extends Controller
     */
     public function show(Room $room)
     {
+        // dd(auth()->user()->hasJoined($room->id));
         return Inertia::render('Room/Show', [
             'authenicated'      => auth()->user(),
             'room'              => $room,
+            'joined'            => false,
             'messagesArray'     => $room->messages()
                                     ->latest()
                                     ->with('user')

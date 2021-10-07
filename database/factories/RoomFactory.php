@@ -25,7 +25,7 @@ class RoomFactory extends Factory
      */
     public function definition()
     {
-        $name = $this->faker->name;
+        $name = $this->faker->unique()->jobTitle;
         $slug = Str::slug($name);
         return [
             'user_id'   => function(){
