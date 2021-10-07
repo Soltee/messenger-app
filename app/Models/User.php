@@ -62,7 +62,7 @@ class User extends Authenticatable
      * 
      * @param \App\Room $room
      */
-    public function joinRoom(Room $room)
+    public function joinRoom($room)
     {
         return $this->joinedRooms()->attach($room);
     }
@@ -76,7 +76,7 @@ class User extends Authenticatable
      */
     public function hasJoined($roomId)
     {
-        return $this->joinedRooms->where('id', $roomId)->firstOrfail() 
+        return $this->joinedRooms()->where('room_id', $roomId)->firstOrfail() 
                     ? true : false;
     }
 }

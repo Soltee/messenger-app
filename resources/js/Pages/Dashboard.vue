@@ -10,7 +10,7 @@
 
         <div class="max-w-7xl mx-auto px-4 my-2 sm:px-6 lg:px-8">
             <div class="flex ">
-                <div class="flex flex-col text-center items-center w-64 bg-white rounded-l-lg px-3 py-3">
+                <div class="flex flex-col text-center items-center w-72 bg-white rounded-l-lg px-3 py-3">
                     <img
                         class="rounded-full w-24 h-24 mb-3" 
                         :src="`https://ui-avatars.com/api/?name=${authenicated.name}`" >
@@ -19,7 +19,10 @@
                     <!-- {{joinedRooms}} -->
 
                     <div class="mt-4 w-full">
-                        <h3 class="text-md text-primary-blue">Joined Rooms</h3>
+                        <h3 class="text-md text-primary-blue">
+                            Joined Rooms
+                            <span class="mr-2">{{ joinedRooms.length }}</span>
+                        </h3>
                         <div class="flex flex-col w-full mt-2">
                             <div v-for="jr in joinedRooms"
                                  class="w-full bg-white shadow-lg rounded-lg mb-5 px-3 py-3 w-full ransform hover:-rotate-2 transition">
@@ -44,20 +47,25 @@
                                 <span class="mr-2">{{ rooms.total }}</span>
                                 Available Rooms
                             </h1>
-                            <div class="flex items-center">
+                            <div class="flex items-center relative">
                                 <BreezeInput 
                                     id="keyword" type="keyword" 
-                                    class="mt-1 block w-full px-3 py-2 focus:border-transparent focus:border-primary-blue" 
+                                    class=" border block w-full px-3 py-2 focus:border-transparent focus:border-white rounded-l" 
                                     v-model="keyword"  autofocus autocomplete="keyword" />
-
+                                <svg 
+                                    @click="reset"
+                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+                                    class="feather h-8 w-8 cursor-pointer absolute right-0 top-0 mt-1 text-red-400 hover:text-red-500"
+                                        ><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                                
                                 
                             </div>
                         </div>
                     </div>
-                    <div class="grid grid-cols-1 gap-5">
+                    <div class="flex flex-col ">
                         <div 
                             v-for="r in rooms.data" 
-                            class="bg-white shadow-lg rounded-lg mb-5 px-3 py-3 transform hover:-rotate-2 transition">
+                            class="bg-white shadow-lg rounded-lg mb-8 px-3 py-3 transform hover:-rotate-2 transition">
                             <a :href="`/rooms/${r.id}`">
                                 <div class="flex justify-between items-center mb-2">
                                     <h1>
@@ -72,6 +80,7 @@
                             </a>
                         </div>
                     </div>
+                    <!-- {{rooms}} -->
 
                     <!-- Pagination forAvailble Rooms -->
                     <!-- {{rooms.total}} -->
@@ -104,16 +113,20 @@
 <script>
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue'
 import BreezeInput from '@/Components/Input.vue'
+import BreezeButton from '@/Components/Button.vue'
 import { Head } from '@inertiajs/inertia-vue3';
 import { Link } from '@inertiajs/inertia-vue3';
+import throttle from 'lodash/throttle'
 let dayjs = require('dayjs');
+let relativeTime = require('dayjs/plugin/relativeTime')
 
 export default {
     components: {
         BreezeAuthenticatedLayout,
         Head,
         Link,
-        BreezeInput
+        BreezeInput,
+        BreezeButton
     },
     props: {
         authenicated : Object,
@@ -126,9 +139,17 @@ export default {
             loading : false
         }
     },
+    watch: {
+        keyword: {
+            handler: throttle(function() {
+                this.$inertia.replace(route('dashboard', {search :this.keyword}))
+              }, 200),
+            deep: true,
+        },
+    },
     methods: {
-        // getMoreRooms(link){
-        //     axios.get(`${link}`)
+        // toggleRoomJoin(room){
+        //     axios.patch(`/rooms/${room}`)
         //     .then(res => {
         //         if(res.status == 200)
         //         {
@@ -139,10 +160,15 @@ export default {
         //     });
         // },
         format(date){
-                return dayjs(date).format('ddd, MMM D, YYYY h:mm A');
+            dayjs.extend(relativeTime)
+            return dayjs(date).from() // in 22 years
+                // return dayjs(date).format('ddd, MMM D, YYYY h:mm A');
         },
         limit(string){
-           return string.substring(0, 15);
+           return string.substring(0, 18);
+        },
+        reset(){
+            this.keyword = '';
         }
     }
 };

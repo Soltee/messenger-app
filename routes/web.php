@@ -31,6 +31,7 @@ Route::group(['middleware' => ['auth', 'verified']], function(){
     //Room
     Route::get('/rooms/{room}', [RoomController::class, 'show'])
                                 ->name('room');
+    Route::patch('/rooms/{room}', [RoomController::class, 'toggle']);
 
     //Messages
     Route::get('/messages', [MessageController::class, 'index']);

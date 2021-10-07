@@ -19,6 +19,11 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 });
 
 
-Broadcast::channel('rooms.{roomId}', function ($user, $roomId) {
-    return $user;
+Broadcast::channel('rooms.{room}', function ($user, Room $room) {
+    $exists     =   $room->joinedByUsers()
+                        ->where('user_id', auth()->user()->id)
+                        ->exists() ? true : false;
+    if($exists){
+        return $user;
+    }
 });

@@ -44,16 +44,59 @@ class DatabaseSeeder extends Seeder
         ]);
 
         //Rooms & Users
-        for ($i=1; $i < 100; $i++) { 
+        // for ($i=1; $i < 100; $i++) { 
          
-            $user = \App\Models\User::inRandomOrder()->pluck('id')->toArray();
+        //     $user = \App\Models\User::where('id', '!=', $u->id)
+        //                                 ->inRandomOrder()
+        //                                 ->pluck('id')->toArray();
+        //     $room = \App\Models\Room::inRandomOrder()->pluck('id')->toArray();
+        //     DB::table('room_user')->insert(
+        //         [
+        //             'user_id'  => Arr::random($user),
+        //             'room_id'  => Arr::random($room),
+        //         ]);
+        //     // code...
+        // }
+        // for ($i=1; $i < 10; $i++) { 
+        //     // code...
+        //     $room = \App\Models\Room::inRandomOrder()->pluck('id')->toArray();
+        //     DB::table('room_user')->insert(
+        //         [
+        //             'user_id'  => $u->id,
+        //             'room_id'  => Arr::random($room),
+        //         ]);
+        // }
+        for ($i=1; $i < 10; $i++) { 
+            // code...
+            $room = \App\Models\Room::inRandomOrder()->pluck('id')->toArray();
+            DB::table('room_user')->insert(
+                [
+                    // 'user_id'  => Arr::random([$u->id, $u2->id]),
+                    'user_id'  => $u->id,
+                    'room_id'  => Arr::random($room),
+                ]);
+        }
+        for ($i=1; $i < 10; $i++) { 
+            // code...
+            $room = \App\Models\Room::inRandomOrder()->pluck('id')->toArray();
+            DB::table('room_user')->insert(
+                [
+                    // 'user_id'  => Arr::random([$u->id, $u2->id]),
+                    'user_id'  => $u2->id,
+                    'room_id'  => Arr::random($room),
+                ]);
+        }
+
+
+        for ($i=1; $i < 50; $i++) { 
+            // code...
+            $user = \App\Models\User::where('user_id', '!=', [$u->id, $u2->id])->inRandomOrder()->pluck('id')->toArray();
             $room = \App\Models\Room::inRandomOrder()->pluck('id')->toArray();
             DB::table('room_user')->insert(
                 [
                     'user_id'  => Arr::random($user),
                     'room_id'  => Arr::random($room),
                 ]);
-            // code...
         }
 
     }

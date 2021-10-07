@@ -15,12 +15,19 @@ class DashboardController extends Controller
     */
     public function index()
     {
+        $auth   = auth()->user();
 
         return Inertia::render('Dashboard', [
-            'authenicated'   => auth()->user(),
+            'search'         => request()->search,
+            'authenicated'   => $auth,
             'rooms'          => Room::latest()
-                                    ->withCount('messages')
-                                    ->with('user')
+                                    ->with('user', 'joinedByUsers')
+                                    // ->whereDoesntHave('joinedByUsers', function ($query) use ($auth) {
+                                    //     $query
+                                    //         ->where('room_user.user_id', '!==', $auth->id);
+                                    // })
+                                    ->whereDoesntHave('joinedByUsers')
+                                    ->filter(request()->only('search'))
                                     ->paginate(10)
                                     ->transform(function($r) {
                                         return [
@@ -37,7 +44,8 @@ class DashboardController extends Controller
             'joinedRooms'   => auth()
                                 ->user()
                                 ->joinedRooms()
-                                ->take(10)
+                                ->latest()
+                                // ->take(10)
                                 ->get()
                                 ->transform(function($r) {
                                         return [
