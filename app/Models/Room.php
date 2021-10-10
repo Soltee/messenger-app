@@ -50,6 +50,14 @@ class Room extends Model
             $query->where(function ($query) use ($search) {
                 $query->where('name', 'like', '%'.$search.'%');
             });
+        })->when($filters['type'] ?? null, function ($query, $type) {
+            if($type === 'joined'){
+                $query->has('joinedByUsers');
+            } elseif($type  === 'available') {
+                $query->whereDoesntHave('joinedByUsers');
+            } else {
+
+            }
         })->when($filters['trashed'] ?? null, function ($query, $trashed) {
             if ($trashed === 'with') {
                 $query->withTrashed();

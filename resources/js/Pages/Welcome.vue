@@ -1,165 +1,168 @@
 <template>
     <Head title="Welcome" />
 
-    <GuestLayout>
-    
-        <div class="max-w-3xl mx-auto px-3 sm:px-6 lg:px-8 py-3 bg-white rounded-lg flex">
-            <div class="w-full md:w-1/2 pl-3 md:pl-4 pr-3 md:pr-6  py-3">
-                <svg 
-                    xmlns="http://www.w3.org/2000/svg" 
-                    viewBox="0 0 24 24" 
-                    fill="none" 
-                    stroke="currentColor" 
-                    stroke-width="2" 
-                    stroke-linecap="round" stroke-linejoin="round" 
-                    class="h-6 w-6 text-primary-blue">
+    <div class="h-screen overflow-hidden flex flex-col justify-center items-center bg-gray-300 px-6 py-6">
+        <div class="bg-white rounded-lg flex flex-col md:flex-row h-full md:max-w-3xl md:mx-auto overflow-y-scroll" >
+            <div class="w-full md:w-1/2 px-6 py-6 flex flex-col justify-center items-center h-full">
+                <div class="w-full">
+                    <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        viewBox="0 0 24 24" 
+                        fill="none" 
+                        stroke="currentColor" 
+                        stroke-width="2" 
+                        stroke-linecap="round" stroke-linejoin="round" 
+                        class="h-6 w-6 text-primary-blue">
 
-                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
 
-                <!-- Form -->
-                <div class="mt-6">
-                    <!-- <BreezeValidationErrors /> -->
+                    <!-- Form -->
+                    <div class="mt-6">
+                        <!-- <BreezeValidationErrors /> -->
+                        
+                        <!-- Login Form -->
+                        <form 
+                            v-if="!formStatus"
+                            @submit.prevent="login"
+                            >
+                            <div>
+                                <BreezeLabel for="email" value="Email" />
+                                <BreezeInput id="email" type="email" class="mt-1 block w-full" v-model="loginForm.email"  autofocus autocomplete="username" />
+                                <div class="mt-1">
+                                    <div 
+                                        v-if="errors.email"
+                                        class="text-red-500 text-md font-semibold">
+                                            {{ errors.email }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-4">
+                                <BreezeLabel for="password" value="Password" />
+                                <BreezeInput id="password" type="password" class="mt-1 block w-full" v-model="loginForm.password"  autocomplete="current-password" />
+                                <div class="mt-1">
+                                    <div 
+                                        v-if="errors.password"
+                                        class="text-red-500 text-md font-semibold">
+                                            {{ errors.password }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="block mt-4">
+                                <label class="flex items-center">
+                                    <BreezeCheckbox name="remember" v-model:checked="loginForm.remember" />
+                                    <span class="ml-2 text-sm text-gray-600">Remember me</span>
+                                </label>
+                            </div>
+
+                            <div class="flex items-center justify-end mt-4">
+                                <!-- <Link  :href="route('password.request')" class="underline text-sm text-gray-600 hover:text-gray-900">
+                                    Forgot your password?
+                                </Link> -->
+
+                                <BreezeButton 
+                                    class="w-full py-3 px-4 text-center bg-primary-blue flex justify-between items-center" 
+                                    :class="{ 'opacity-25': loginForm.processing }" :disabled="loginForm.processing">
+                                    <span>Log in</span>
+                                    <svg 
+                                        v-if="processing"
+                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin: auto;  none repeat scroll 0% 0%; display: block; shape-rendering: auto; padding:0;" width="24px" height="24px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+                                        <circle cx="50" cy="50" fill="none" stroke="#f8f8fc" stroke-width="10" r="35" stroke-dasharray="164.93361431346415 56.97787143782138">
+                                          <animateTransform attributeName="transform" type="rotate" repeatCount="indefinite" dur="1s" values="0 50 50;360 50 50" keyTimes="0;1"></animateTransform>
+                                        </circle>
+                                    </svg>
+                                </BreezeButton>
+
+                            </div>
+                            <div class="flex justify-center mt-2">
+                                <span 
+                                    @click="toggleForm"
+                                    class="underline cursor-pointer text-center text-sm text-gray-600 hover:text-gray-900 font-medium">
+                                    Don't have an account? Signup
+                                </span>
+                            </div>
+                        </form>
+                        <!-- Signup Form -->
+                        <form 
+                            v-else
+                            @submit.prevent="signup">
+                            <div>
+                                <BreezeLabel for="name" value="Name" />
+                                <BreezeInput id="name" type="text" 
+                                    class="mt-1 block w-full border"
+                                    :class="`{errors.name ? 'border-red-400' : ''}`" 
+                                    v-model="signupForm.name" 
+                                     autofocus autocomplete="name" />
+
+                                <div class="mt-1">
+                                    <div 
+                                        v-if="errors.name"
+                                        class="text-red-500 text-md font-semibold">
+                                            {{ errors.name }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-4">
+                                <BreezeLabel for="email" value="Email" />
+                                <BreezeInput id="email" type="email" class="mt-1 block w-full" v-model="signupForm.email"  autocomplete="username" />
+                                <div class="mt-1">
+                                    <div 
+                                        v-if="errors.email"
+                                        class="text-red-500 text-md font-semibold">
+                                            {{ errors.email }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-4">
+                                <BreezeLabel for="password" value="Password" />
+                                <BreezeInput id="password" type="password" class="mt-1 block w-full" v-model="signupForm.password"  autocomplete="new-password" />
+
+                            </div>
+
+                            <div class="mt-4">
+                                <BreezeLabel for="password_confirmation" value="Confirm Password" />
+                                <BreezeInput id="password_confirmation" type="password" class="mt-1 block w-full" v-model="signupForm.password_confirmation"  autocomplete="new-password" />
+                                <div class="mt-1">
+                                    <div 
+                                        v-if="errors.password"
+                                        class="text-red-500 text-md font-semibold">
+                                            {{ errors.password }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-end mt-4">
+
+
+                                <BreezeButton 
+                                    class="w-full px-3 py-3 bg-primary-blue flex justify-between items-center" 
+                                    :class="{ 'opacity-25': signupForm.processing }" :disabled="signupForm.processing">
+                                    <span class="mr-2">Signup</span>
+                                    <svg 
+                                        v-if="processing"
+                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin: auto;  none repeat scroll 0% 0%; display: block; shape-rendering: auto; padding:0;" width="24px" height="24px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+                                        <circle cx="50" cy="50" fill="none" stroke="#f8f8fc" stroke-width="10" r="35" stroke-dasharray="164.93361431346415 56.97787143782138">
+                                          <animateTransform attributeName="transform" type="rotate" repeatCount="indefinite" dur="1s" values="0 50 50;360 50 50" keyTimes="0;1"></animateTransform>
+                                        </circle>
+                                    </svg>
+                                    
+                                </BreezeButton>
+                            </div>
+                            <div class="flex justify-center mt-2">
+                                <span 
+                                    @click="toggleForm"
+                                    class="underline cursor-pointer text-center text-sm text-gray-600 hover:text-gray-900 font-medium">
+                                    Already registered?
+                                </span>
+                            </div>
+                        </form>
+
+                    </div>
+
                     
-                    <!-- Login Form -->
-                    <form 
-                        v-if="!formStatus"
-                        @submit.prevent="login"
-                        >
-                        <div>
-                            <BreezeLabel for="email" value="Email" />
-                            <BreezeInput id="email" type="email" class="mt-1 block w-full" v-model="loginForm.email"  autofocus autocomplete="username" />
-                            <div class="mt-1">
-                                <div 
-                                    v-if="errors.email"
-                                    class="text-red-500 text-md font-semibold">
-                                        {{ errors.email }}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mt-4">
-                            <BreezeLabel for="password" value="Password" />
-                            <BreezeInput id="password" type="password" class="mt-1 block w-full" v-model="loginForm.password"  autocomplete="current-password" />
-                            <div class="mt-1">
-                                <div 
-                                    v-if="errors.password"
-                                    class="text-red-500 text-md font-semibold">
-                                        {{ errors.password }}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="block mt-4">
-                            <label class="flex items-center">
-                                <BreezeCheckbox name="remember" v-model:checked="loginForm.remember" />
-                                <span class="ml-2 text-sm text-gray-600">Remember me</span>
-                            </label>
-                        </div>
-
-                        <div class="flex items-center justify-end mt-4">
-                            <!-- <Link  :href="route('password.request')" class="underline text-sm text-gray-600 hover:text-gray-900">
-                                Forgot your password?
-                            </Link> -->
-
-                            <BreezeButton 
-                                class="w-full py-3 px-4 text-center bg-primary-blue flex justify-between items-center" 
-                                :class="{ 'opacity-25': loginForm.processing }" :disabled="loginForm.processing">
-                                <span>Log in</span>
-                                <svg 
-                                    v-if="processing"
-                                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin: auto;  none repeat scroll 0% 0%; display: block; shape-rendering: auto; padding:0;" width="24px" height="24px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
-                                    <circle cx="50" cy="50" fill="none" stroke="#f8f8fc" stroke-width="10" r="35" stroke-dasharray="164.93361431346415 56.97787143782138">
-                                      <animateTransform attributeName="transform" type="rotate" repeatCount="indefinite" dur="1s" values="0 50 50;360 50 50" keyTimes="0;1"></animateTransform>
-                                    </circle>
-                                </svg>
-                            </BreezeButton>
-
-                        </div>
-                        <div class="flex justify-center mt-2">
-                            <span 
-                                @click="toggleForm"
-                                class="underline cursor-pointer text-center text-sm text-gray-600 hover:text-gray-900 font-medium">
-                                Don't have an account? Signup
-                            </span>
-                        </div>
-                    </form>
-                    <!-- Signup Form -->
-                    <form 
-                        v-else
-                        @submit.prevent="signup">
-                        <div>
-                            <BreezeLabel for="name" value="Name" />
-                            <BreezeInput id="name" type="text" 
-                                class="mt-1 block w-full border"
-                                :class="`{errors.name ? 'border-red-400' : ''}`" 
-                                v-model="signupForm.name" 
-                                 autofocus autocomplete="name" />
-
-                            <div class="mt-1">
-                                <div 
-                                    v-if="errors.name"
-                                    class="text-red-500 text-md font-semibold">
-                                        {{ errors.name }}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mt-4">
-                            <BreezeLabel for="email" value="Email" />
-                            <BreezeInput id="email" type="email" class="mt-1 block w-full" v-model="signupForm.email"  autocomplete="username" />
-                            <div class="mt-1">
-                                <div 
-                                    v-if="errors.email"
-                                    class="text-red-500 text-md font-semibold">
-                                        {{ errors.email }}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mt-4">
-                            <BreezeLabel for="password" value="Password" />
-                            <BreezeInput id="password" type="password" class="mt-1 block w-full" v-model="signupForm.password"  autocomplete="new-password" />
-
-                        </div>
-
-                        <div class="mt-4">
-                            <BreezeLabel for="password_confirmation" value="Confirm Password" />
-                            <BreezeInput id="password_confirmation" type="password" class="mt-1 block w-full" v-model="signupForm.password_confirmation"  autocomplete="new-password" />
-                            <div class="mt-1">
-                                <div 
-                                    v-if="errors.password"
-                                    class="text-red-500 text-md font-semibold">
-                                        {{ errors.password }}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="flex items-center justify-end mt-4">
-
-
-                            <BreezeButton 
-                                class="w-full px-3 py-3 bg-primary-blue flex justify-between items-center" 
-                                :class="{ 'opacity-25': signupForm.processing }" :disabled="signupForm.processing">
-                                <span class="mr-2">Signup</span>
-                                <svg 
-                                    v-if="processing"
-                                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin: auto;  none repeat scroll 0% 0%; display: block; shape-rendering: auto; padding:0;" width="24px" height="24px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
-                                    <circle cx="50" cy="50" fill="none" stroke="#f8f8fc" stroke-width="10" r="35" stroke-dasharray="164.93361431346415 56.97787143782138">
-                                      <animateTransform attributeName="transform" type="rotate" repeatCount="indefinite" dur="1s" values="0 50 50;360 50 50" keyTimes="0;1"></animateTransform>
-                                    </circle>
-                                </svg>
-                                
-                            </BreezeButton>
-                        </div>
-                        <div class="flex justify-center mt-2">
-                            <span 
-                                @click="toggleForm"
-                                class="underline cursor-pointer text-center text-sm text-gray-600 hover:text-gray-900 font-medium">
-                                Already registered?
-                            </span>
-                        </div>
-                    </form>
-
                 </div>
                 
             </div>
@@ -171,10 +174,11 @@
                     class="w-full h-full inset-0">
 
             </div>
-            
+                
         </div>
 
-    </GuestLayout>
+    </div>
+
 
 </template>
 

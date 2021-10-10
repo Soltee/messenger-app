@@ -56,6 +56,8 @@ class AppServiceProvider extends ServiceProvider
                 {
                     return [
                         'data'  => $this->items->toArray(),
+                        'prev'  => $this->previousPageUrl(),
+                        'next'  => $this->nextPageUrl(),
                         'links' => $this->links(),
                         'total' => $this->total()
                     ];
@@ -76,23 +78,23 @@ class AppServiceProvider extends ServiceProvider
                     ]);
 
                     return Collection::make($elements)->flatMap(function ($item) {
-                        if (is_array($item)) {
-                            return Collection::make($item)->map(function ($url, $page) {
-                                return [
-                                    'url' => $url,
-                                    'label' => $page,
-                                    'active' => $this->currentPage() === $page,
-                                ];
-                            });
-                        } else {
-                            return [
-                                [
-                                    'url' => null,
-                                    'label' => '...',
-                                    'active' => false,
-                                ],
-                            ];
-                        }
+                        // if (is_array($item)) {
+                        //     return Collection::make($item)->map(function ($url, $page) {
+                        //         return [
+                        //             'url' => $url,
+                        //             'label' => $page,
+                        //             'active' => $this->currentPage() === $page,
+                        //         ];
+                        //     });
+                        // } else {
+                        //     return [
+                        //         [
+                        //             'url' => null,
+                        //             'label' => '...',
+                        //             'active' => false,
+                        //         ],
+                        //     ];
+                        // }
                     })->prepend([
                         'url' => $this->previousPageUrl(),
                         'label' => 'Previous',

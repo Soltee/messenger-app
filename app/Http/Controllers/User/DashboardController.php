@@ -19,16 +19,12 @@ class DashboardController extends Controller
 
         return Inertia::render('Dashboard', [
             'search'         => request()->search,
+            'type'           => request()->type,
             'authenicated'   => $auth,
             'rooms'          => Room::latest()
                                     ->with('user', 'joinedByUsers')
-                                    // ->whereDoesntHave('joinedByUsers', function ($query) use ($auth) {
-                                    //     $query
-                                    //         ->where('room_user.user_id', '!==', $auth->id);
-                                    // })
-                                    ->whereDoesntHave('joinedByUsers')
-                                    ->filter(request()->only('search'))
-                                    ->paginate(10)
+                                    ->filter(request()->only('search', 'type'))
+                                    ->paginate(6)
                                     ->transform(function($r) {
                                         return [
                                             'id'         => $r->id,
