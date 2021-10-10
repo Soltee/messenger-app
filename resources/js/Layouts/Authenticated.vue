@@ -51,11 +51,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="bg-blue-100 w-80 h-full">
-                    <slot name="tab" />
-                </div>
+                
+                <!-- Second Column  -->
+                <slot name="tab" />
 
-                <div class="bg-white flex-1 w-screen px-6 py-6">
+                <div class="bg-white flex-1 w-screen px-6 py-6 h-full overflow-y-auto">
                     <slot />
                 </div>
             </div>
