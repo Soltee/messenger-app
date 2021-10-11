@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 use App\Models\Room;
@@ -11,7 +12,7 @@ use App\Models\Room;
 class RoomController extends Controller
 {
     /**
-     * Join Room 
+     * Toggle Room 
      * 
     */
     public function toggle(Room $room)
@@ -24,6 +25,26 @@ class RoomController extends Controller
     }
 
     /**
+     * Store New Room
+     * 
+    */
+    public function store(Request $request)
+    {
+        $validated     = $request->validate([
+                'name' => 'required|string|min:3|unique:rooms'
+            ]);
+
+        $room = auth()->user()->rooms()->create([
+            'name'   => $validated['name'],
+            'slug'   => Str::slug($validated['name'])
+        ]);
+
+        return back()->with(['room' => $room]);
+
+    }
+
+
+    /**
      * Show the Specific room
      * 
     */
@@ -33,7 +54,6 @@ class RoomController extends Controller
         $joined   = $room->joinedByUsers()
                         ->where('user_id', auth()->user()->id)
                         ->exists() ? true : false;
-        // dd($room->user);
 
         return Inertia::render('Room/Show', [
             'authenicated'      => $auth,

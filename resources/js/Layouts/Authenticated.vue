@@ -4,14 +4,9 @@
         <div class="absolute inset-0 overflow-hidden">
             <div class="fixed inset-0 flex">
                 <!-- -->
-                <div class="bg-blue-100">
-                    <div class="h-full flex flex-col bg-white shadow-xl ">
-                        <div class="flex flex-col text-center justify-center items-center border-b border-gray-200 py-4">
-                            <img 
-                                class="h-8 w-8 border-2 border-gray-900 rounded-full"
-                                :src="`https://ui-avatars.com/api/?name=${$page.props.auth.user.name}&background=fff&color=0f1624`" >
-                            
-                        </div>
+                <div class=" h-full bg-gray-100 shadow-lg">
+                    <div class="h-full flex flex-col  py-4">
+                        
 
                         <div class="flex-1 overflow-y-auto">
                             
@@ -50,7 +45,12 @@
                             </div>
                         </div>
 
-                        
+                        <div class="flex flex-col text-center justify-center items-center border-t border-gray-200 py-4">
+                            <img 
+                                class="h-8 w-8 border-2 border-gray-900 rounded-full"
+                                :src="`https://ui-avatars.com/api/?name=${$page.props.auth.user.name}&background=fff&color=0f1624`" >
+                            
+                        </div>
                     </div>
                 </div>
                 
