@@ -2,7 +2,7 @@
     <Head title="Welcome" />
 
     <div class="h-screen overflow-hidden flex flex-col justify-center items-center bg-gray-300 px-6 py-6">
-        <div class="bg-white rounded-lg flex flex-col md:flex-row h-full md:max-w-3xl md:mx-auto overflow-y-scroll" >
+        <div class="bg-white rounded-lg flex flex-col md:flex-row h-full md:max-w-3xl md:mx-auto overflow-y-auto" >
             <div class="w-full md:w-1/2 px-6 py-6 flex flex-col justify-center items-center h-full">
                 <div class="w-full">
                     <svg 

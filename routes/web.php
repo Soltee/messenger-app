@@ -13,6 +13,7 @@ use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\User\RoomController;
 use App\Http\Controllers\User\MessageController;
 
+use App\Http\Controllers\User\Api\RoomController as ApiRoomController;
 
 Route::group(['middleware' => 'guest'], function(){
     Route::get('/', [WelcomeController::class, 'index'])
@@ -39,7 +40,8 @@ Route::group(['middleware' => ['auth', 'verified']], function(){
     Route::get('/messages', [MessageController::class, 'index']);
     Route::post('/messages', [MessageController::class, 'store']);
 
-    //Room
+    //Room Api
+    Route::get('/rooms', [ApiRoomController::class, 'index']);
     Route::get('/rooms/{room}', [RoomController::class, 'show'])
                                 ->name('room');
     Route::patch('/rooms/{room}', [RoomController::class, 'toggle']);
