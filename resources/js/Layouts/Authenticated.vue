@@ -57,9 +57,11 @@
                 <!-- Second Column  -->
                 <slot name="tab" />
 
-                <div class="bg-white flex-1 w-screen px-6 py-6 h-full overflow-y-auto">
-                    <slot />
-                </div>
+                
+                <slot />
+            
+
+                <slot name="room" />
             </div>
         </div>
     </div>

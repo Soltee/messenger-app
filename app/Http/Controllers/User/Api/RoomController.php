@@ -19,19 +19,17 @@ class RoomController extends Controller
                     ->with('user', 'joinedByUsers')
                     ->filter(request()->only('search', 'type'))
                     ->paginate(6)
-                    ->transform(function($r) {
+                    ->transform(function($r) { 
                         return [
                             'id'         => $r->id,
                             'user'       => $r->user,
                             'name'       => $r->name,
                             'slug'       => $r->slug,
-                            'users'      => $r
-                                            ->joinedByUsers()
-                                            ->count(),
+                            'users'      => $r->joinedByUsers()
+                                                ->count(), 
                             'created'    => $r->created_at
-                        ];
+                        ];             
                     });
-
         return response()->json([
                 'search'         => request()->search,
                 'type'           => request()->type,

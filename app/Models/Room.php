@@ -57,8 +57,8 @@ class Room extends Model
                 $query->has('joinedByUsers');
             } elseif($type  === 'available') {
                 $query->whereDoesntHave('joinedByUsers');
-            } else {
-
+            } elseif($type  === 'created') {
+                $query->where('user_id', auth()->user()->id);
             }
         })->when($filters['trashed'] ?? null, function ($query, $trashed) {
             if ($trashed === 'with') {

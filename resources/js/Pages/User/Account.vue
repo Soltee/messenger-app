@@ -41,7 +41,7 @@
 
         </template>
 
-        <div class="bg-white">
+        <div class="bg-white flex-1 w-screen px-6 py-6 h-full overflow-y-auto">
 
             <div 
                 v-if="select === 'account'"

@@ -39,6 +39,8 @@ class RoomController extends Controller
             'slug'   => Str::slug($validated['name'])
         ]);
 
+        auth()->user()->joinedRooms()->toggle($room);
+
         return back()->with(['room' => $room]);
 
     }
@@ -54,15 +56,14 @@ class RoomController extends Controller
         $joined   = $room->joinedByUsers()
                         ->where('user_id', auth()->user()->id)
                         ->exists() ? true : false;
-
         return Inertia::render('Room/Show', [
             'authenicated'      => $auth,
             'room'              => $room,
             'admin'             => $room->user,
             'joined'            => $joined,
-            'joinedUsers'       => $room->joinedByUsers()->get(),
+            'joinedUsers'       => $room->joinedByUsers()->paginate(1),
             'messagesArray'     => $room->messages()
-                                    // ->latest()
+                                    ->latest()
                                     ->with('user')
                                     ->paginate(10)
                                     ->transform(function($m) {

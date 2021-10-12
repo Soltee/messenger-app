@@ -11,7 +11,7 @@
                 <div class="h-full flex flex-col bg-white w-full">
                     
                     <li 
-                        @click="selectTab('rooms')"
+                        @click="selectTab('rooms');"
                         class=" w-full py-2 group text-lg font-semibold flex text-gray-400 border-r-2 border-gray-300 mb-3 hover:border-gray-900 cursor-pointer w-full"
                         :class="isRooms">
                        
@@ -21,7 +21,7 @@
                     </li>
 
                     <li 
-                        @click="selectTab('create')"
+                        @click="selectTab('create');  "
                         class=" w-full py-2 group text-lg font-semibold flex text-gray-400 border-r-2 border-gray-300 mb-3 hover:border-gray-900 cursor-pointer w-full"
                         :class="isCreate">
                        
@@ -36,7 +36,7 @@
 
             <!-- -->
             <div
-                class="bg-blue-100 w-80 h-full">
+                class="bg-blue-100 w-72 h-full">
                 <div
                     class="h-full flex flex-col bg-white shadow-xl ">
                     <!-- New Room Create -->
@@ -155,6 +155,7 @@
                                             alt="Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt." 
                                             class="w-full h-full object-center object-cover">
                                         </div> -->
+                                        <!-- {{room}} -->
                                         <div class="ml-4 flex-1 flex justify-between">
                                             <div class="flex flex-col">
                                                 <h1 class="text-lg text-gray-900">
@@ -194,14 +195,15 @@
 
 
         <!-- Slot -->
-        <div>
+        <div class="bg-white flex-1 w-screen px-6 py-6 h-full overflow-y-auto">
 
             <!-- Create -->
             <div 
                 v-if="select === 'create'" 
                 class="">
                 
-                Create
+
+                djfs
 
             </div>
 
@@ -210,7 +212,7 @@
                 v-if="select === 'rooms'" 
                 class="">
                 
-                Rooms
+            r
 
             </div>
             
@@ -254,22 +256,24 @@ export default {
     },
     data(){
         return {
-            select    : 'create',
-            roomsDiv  : document.getElementById('roomsDiv'),
+            select        : 'rooms',
+            roomsDiv      : document.getElementById('roomsDiv'),
 
-            roomForm  : {
-                name        : '',
-                processing  : false,
+            keyword       : '',
+            type          : '',
+            loading       : false,
+            err           : false,
+            roomsUrl      : '/rooms',
+            rooms         : [],
+            nextPage      : '',
+
+            roomForm      : {
+                name            : '',
+                processing      : false,
             },
-            success   : false,
+            success       : false,
 
-            keyword   : '',
-            type      : '',
-            loading   : false,
-            err       : false,
-            roomsUrl  : '/rooms',
-            rooms     : [],
-            nextPage  : '',
+            selectedRoom  : {},
         }
     },
     computed: {
@@ -395,6 +399,10 @@ export default {
 
                     this.success   = true
                     this.reset();
+                    this.roomsUrl  = `/rooms?search=${this.keyword}&type=created`;
+                    this.rooms     = [];
+                    this.nextPage  = '';
+                    this.getRooms();
 
                 }
             })
@@ -402,8 +410,18 @@ export default {
 
         selectTab(tab){
             this.roomsDiv   = document.getElementById('roomsDiv');
-            // this.$refs.roomsDiv;
             this.select     = tab;
+            if(tab ===  'create'){
+                this.roomsUrl  = `/rooms?search=${this.keyword}&type=created`;
+                this.rooms     = [];
+                this.nextPage  = '';
+                this.getRooms();
+            } else {
+                this.roomsUrl  = `/rooms`;
+                this.rooms     = [];
+                this.nextPage  = '';
+                this.getRooms();
+            }
             this.message    = ''; 
             this.roomForm    = {
                 name         : '',
