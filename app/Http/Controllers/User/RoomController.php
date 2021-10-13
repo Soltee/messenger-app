@@ -57,7 +57,7 @@ class RoomController extends Controller
         $joined   = $room->joinedByUsers()
                         ->where('user_id', auth()->user()->id)
                         ->exists() ? true : false;
-        return Inertia::render('User/Room/Show', [
+        return Inertia::render('Room/Show', [
             'authenicated'      => $auth,
             'room'              => $room,
             'admin'             => $room->user,

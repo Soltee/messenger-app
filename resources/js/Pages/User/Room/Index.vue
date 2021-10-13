@@ -30,22 +30,22 @@
                     <div class="">
                         <div class="flow-root ">
                             <div
-                                class="clearfix flex justify-between  px-3 py-3  clear-both divide-y divide-gray-300 border-r-4"
+                                class="clearfix flex justify-between  px-5 py-3  clear-both divide-y divide-gray-300 text-gray-700 border-r-4 mb-4 divide-y divide-gray-200"
 
                                 v-for="room in rooms"
                                 @click="selectRoom(room.id)"
                                 :class="ifSelected(room.id)"
                                 >
                                     <div class="flex flex-col">
-                                        <h1 class="text-lg  m-0">
+                                        <h1 class="text-lg m-0 capitalize">
                                             {{ limit(room.name, 12) }}
                                         </h1>
-                                        <span class="text-xs  ">{{ format(room.created) }}</span>
+                                        <span class="text-xs -mt-2">{{ format(room.created) }}</span>
                                     </div>
-                                    <div class="flex flex-col items-end">
+                                    <!-- <div class="flex flex-col items-end">
                                         <span class="text-md ">Joined</span>
                                         <span class="text-xs font-medium ">{{ room.users }}</span>
-                                    </div>
+                                    </div> -->
 
                             </div> 
 
@@ -84,7 +84,7 @@
             class="bg-white flex-1 px-6 py-6 h-full ">
 
             <div
-                v-if="joinSelectedRoom" 
+                v-if="joinedSelectedRoom" 
                 class="relative flex items-center w-full shadow-lg">
                 <input
                     type="text"
@@ -115,12 +115,13 @@
             <!-- Messages -->
             <div
                 ref="messagesDiv"
+                id="messagesDiv"
                 class="mt-4 overflow-y-auto h-full">
                 
                 <div class="">
                     <div class="flow-root clear-both">
                         <div
-                            class="clearfix mb-6 flex justify-between  px-3 py-2 w-2/3 transform hover:-rotate-1 transition clear-both"
+                            class="clearfix mb-6 flex   px-3 py-2 w-2/3 transform hover:-rotate-1 transition clear-both"
 
                             v-for="message in selectedRoomMessages.messages"
                             :class="isLoggedUser(message.user.id)"
@@ -130,7 +131,7 @@
                                     :src="`https://ui-avatars.com/api/?name=${message.user.name}&&background=fff`" >
 
                                 
-                                <div class="ml-3 rounded-lg border border-gray-300 px-3 py-3 flex flex-col">
+                                <div class="mx-3 rounded-lg border border-gray-300 px-3 py-3 flex flex-col">
                                     <span class="text-xs mb-2">{{ format(message.created) }}</span>
 
                                     <p>{{ message.content }}</p>
@@ -170,7 +171,7 @@
         <template #room>
 
             <div 
-                class="h-full flex flex-col text-center  w-64 bg-gray-100 pb-6">
+                class="h-full flex flex-col text-center  w-64 bg-gray-100 pb-6 right-0">
                 <div class="px-4 py-6 flex flex-col items-center">
                     <img
                         class="rounded-full w-24 h-24 mb-3 text-center" 
@@ -178,7 +179,7 @@
 
                     <!-- Authenticated user Status -->
                     <div 
-                        v-if="!joinSelectedRoom"
+                        v-if="!joinedSelectedRoom"
                         @click="toggleRoom" 
                         class="w-full px-5 py-2 rounded flex justify-between items-center 
                             border border-primary-blue text-lg font-semibold text-primary-blue cursor-pointer hover:bg-primary-blue hover:text-white">
@@ -255,7 +256,7 @@ export default {
             nextPage      : '',   
 
             selected          : '',
-            joinSelectedRoom  : false, 
+            joinedSelectedRoom  : false, 
             selectedCreatedUser : {},
 
 
@@ -267,7 +268,7 @@ export default {
             },
 
 
-            messagesDiv              : '',
+            messagesDiv              : document.getElementById('messagesDiv'),
             selectedRoomMessagesUrl  : '',
             selectedRoomMessages         : {
                 messages     : [],
@@ -381,7 +382,7 @@ export default {
                 this.loading  = false;
                 if(res.status == 200){
 
-                    this.joinSelectedRoom           = res.data.joined;
+                    this.joinedSelectedRoom         = res.data.joined;
                     this.selectedCreatedUser        = res.data.admin;
 
                     if(this.selectedJoinedUsers.nextPage){
@@ -398,7 +399,8 @@ export default {
                     
                     this.selectedJoinedUsers.nextPage  = res.data.joinedUsers.next;
                     this.selectedJoinedUsersUrl        = this.selectedJoinedUsers.nextPage;
-                
+
+                    this.setUpEcho();
                 }
             }).catch(err => {
                 this.loading  = false;
@@ -442,21 +444,95 @@ export default {
         selectRoom(room){
             this.loading     = true;
             this.selected    = room;
+
+            this.selectedJoinedUsers      = {
+                users        : [],
+                nextPage     : '',
+            };
+
+
+            this.selectedRoomMessages     = {
+                messages     : [],
+                nextPage     : ''
+            };
+
             this.selectedJoinedUsersUrl  = `/chat/${room}`;
             this.selectedRoomMessagesUrl = `/chat/${room}/messages`;
             this.getSelectedRoom();
             this.getSelectedRoomMessages();
         },
 
+        toggleRoom(){
+            axios.patch(`/rooms/${this.selected}`)
+            .then(res => {
+                
+                if(res.status == 200){
+                    this.joinedSelectedRoom      = !this.joinedSelectedRoom;
+                    this.selectedJoinedUsersUrl  = `/chat/${this.selected}`;
+                    this.getSelectedRoom();
+                    this.setUpEcho();
+                }
+
+            }).catch(err => {
+                this.$swal('Server error.', 'error');
+            });
+        },
+
         isLoggedUser(user){
             return {
-                'even:float-right odd:clear-both' : user === this.authenicated.id
+                'even:float-right odd:clear-both ml-auto flex-row-reverse' : user === this.authenicated.id
             }
         },
 
         ifSelected(room){
             return {
-                'border-gray-900'  : room === this.selected
+                'border-gray-900 text-gray-900 font-bold'  : room === this.selected
+            }
+        },
+
+        sendMessage(){
+            this.sending  = true;
+
+            if(this.newMessage.length < 1)
+            {
+                this.sending   = false;
+                return;
+            }
+
+            axios.post('/messages', {
+                room    : this.selected,
+                message : this.newMessage
+            }).then(res => {
+                this.newMessage  = '';
+                this.sending     = false;
+                if(res.status == 201){
+                    this.setUpEcho();
+                }
+            }).catch(err => {
+                this.newMessage   = '';
+                this.sending      = false;
+            });
+        },
+
+        setUpEcho(){
+            if(this.selected){
+                Echo.join(`rooms.${this.selected}`)
+                    .here(function (members) {
+                        // runs when you join
+                        // console.table(members);
+                    })
+                    .joining(function (joiningMember, members) {
+                        // runs when another member joins
+                        // console.table(joiningMember);
+                    })
+                    .leaving(function (leavingMember, members) {
+                        // runs when another member leaves
+                        // console.table(leavingMember);
+                    })
+                    .listen('MessageSentEvent', (message) => {
+                        this.selectedRoomMessages.messages.unshift(message);
+                    });
+
             }
         },
 

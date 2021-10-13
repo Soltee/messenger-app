@@ -54,7 +54,7 @@ class RoomController extends Controller
         $this->authenticated()->joinedRooms()->toggle($room);
 
         return response()->json([
-            'users'   => $room->joinedByUsers()->get()
+            'joinedUsers'    => $room->joinedByUsers()->paginate(10)
         ], 200);
     }
 

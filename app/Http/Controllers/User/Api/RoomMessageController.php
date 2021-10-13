@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Room;
 use App\Models\Message;
+use App\Events\MessageSentEvent;
 
 class RoomMessageController extends Controller
 {
@@ -21,7 +22,7 @@ class RoomMessageController extends Controller
             'messagesArray'     => $room->messages()
                                     ->latest()
                                     ->with('user')
-                                    ->paginate(4)
+                                    ->paginate(6)
                                     ->transform(function($m) {
                                         return [
                                             'id'         => $m->id,
@@ -32,5 +33,35 @@ class RoomMessageController extends Controller
                                     })
         ], 200);
 
+    }
+
+    /**
+     * Store  & Broadcast the message to others
+     * 
+    */
+
+    public function store(Request $request)
+    {
+        $data    = $request->validate([
+                        'room'     => 'required|integer',
+                        'message'  => 'required'
+                    ]);
+
+        $user    = auth()->user();
+
+        $room    = Room::findOrfail($data['room']);
+
+        $message = $user->messages()->create([
+            'room_id'   => $room->id,
+            'message'   => $data['message']
+        ]);
+
+
+        broadcast(new MessageSentEvent($message, $user, $room));
+
+        return response()->json([
+            'newMessage'  => $message
+        ], 201);
+    
     }
 }

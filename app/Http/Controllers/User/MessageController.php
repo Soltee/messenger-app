@@ -15,28 +15,6 @@ class MessageController extends Controller
 {
 
     /**
-     * Axios Get message
-     * 
-    */
-    public function index()
-    {
-        return response()->json([
-            'messages'  => Message::with('user', 'room')
-                            ->paginate(10)
-                            ->transform(function($m) {
-                                return [
-                                    'id'         => $m->id,
-                                    'user'       => $m->user,
-                                    'room'       => $m->room,
-                                    'content'    => $m->message,
-                                    'created'    => $m->created_at
-                                ];
-                            })
-        ], 200);
-
-    }
-
-    /**
      * Store  & Broadcast the message to others
      * 
     */

@@ -45,16 +45,16 @@ Route::group(['middleware' => ['auth', 'verified']], function(){
     Route::get('/dashboard', [DashboardController::class, 'index'])
                                 ->name('dashboard');
 
-    //Messages
-    Route::get('/messages', [MessageController::class, 'index']);
-    Route::post('/messages', [MessageController::class, 'store']);
+    //Messages Api
+    Route::post('/messages', [RoomMessageController::class, 'store']);
 
+    Route::get('/rooms/{room}', [RoomController::class, 'show'])->name('rooms');
 
     //Room Api
     Route::get('/rooms', [ApiRoomController::class, 'index']);
     Route::post('/rooms', [RoomController::class, 'store']);
-
     Route::patch('/rooms/{room}', [ApiRoomController::class, 'toggle']);  
+
 
 });
 
