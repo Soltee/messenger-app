@@ -9,7 +9,7 @@
                 <div class="h-full flex flex-col bg-white shadow-xl w-full">
                     <li 
                         @click="select = 'account'; message='';"
-                        class="mr-3  w-auto px-3 py-2 group text-lg font-semibold flex text-gray-400 border-r-2 border-gray-300 mb-3 hover:border-gray-900 cursor-pointer w-full"
+                        class="mr-3  w-auto px-3 py-2 group text-lg font-semibold flex text-gray-400 border-r-4 border-gray-300 mb-3 hover:border-gray-900 cursor-pointer w-full"
                         :class="isAccount">
                        
                         <span 
@@ -18,7 +18,7 @@
                     </li>
                     <li 
                         @click="select = 'password'; message='';"
-                        class="mr-3  w-auto px-3 py-2 group text-lg font-semibold flex text-gray-400 border-r-2 border-gray-300 mb-3 hover:border-gray-900 cursor-pointer w-full"
+                        class="mr-3  w-auto px-3 py-2 group text-lg font-semibold flex text-gray-400 border-r-4 border-gray-300 mb-3 hover:border-gray-900 cursor-pointer w-full"
                         :class="isPassword">
                        
                         <span 
@@ -27,7 +27,7 @@
                     </li>
                     <li 
                         @click="select = 'logout'; message='';"
-                        class="mr-3  w-auto px-3 py-2 group text-lg font-semibold flex text-gray-400 border-r-2 border-gray-300 mb-3 hover:border-gray-900 cursor-pointer w-full"
+                        class="mr-3  w-auto px-3 py-2 group text-lg font-semibold flex text-gray-400 border-r-4 border-gray-300 mb-3 hover:border-gray-900 cursor-pointer w-full"
                         :class="isLogout"
                         >
                        

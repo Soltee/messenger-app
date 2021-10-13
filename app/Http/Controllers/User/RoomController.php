@@ -12,16 +12,17 @@ use App\Models\Room;
 class RoomController extends Controller
 {
     /**
-     * Toggle Room 
+     * Show All the Joined Rooms
      * 
     */
-    public function toggle(Room $room)
+    public function index()
     {
-        auth()->user()->joinedRooms()->toggle($room);
+        $auth     =  auth()->user();
 
-        return response()->json([
-            'users'   => $room->joinedByUsers()->get()
-        ], 200);
+        return Inertia::render('User/Room/Index', [
+            'authenicated'      => $auth            
+        ]);
+
     }
 
     /**
@@ -56,7 +57,7 @@ class RoomController extends Controller
         $joined   = $room->joinedByUsers()
                         ->where('user_id', auth()->user()->id)
                         ->exists() ? true : false;
-        return Inertia::render('Room/Show', [
+        return Inertia::render('User/Room/Show', [
             'authenicated'      => $auth,
             'room'              => $room,
             'admin'             => $room->user,

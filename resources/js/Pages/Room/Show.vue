@@ -37,7 +37,7 @@
                     </div>
 
 
-                    <!-- Rooms -->
+                    <!-- Messages -->
                     <div
                         ref="messagesDiv"
                         id="messagesDiv"
@@ -97,7 +97,7 @@
         </template>
     
         <template #room>
-             <div class="h-full flex flex-col text-center  w-64 bg-gray-100 pb-6">
+            <div class="h-full flex flex-col text-center  w-64 bg-gray-100 pb-6">
                 <div class="px-4 py-6 flex flex-col items-center">
                     <img
                         class="rounded-full w-24 h-24 mb-3 text-center" 

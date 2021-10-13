@@ -18,7 +18,7 @@ class RoomController extends Controller
         $rooms = Room::latest()
                     ->with('user', 'joinedByUsers')
                     ->filter(request()->only('search', 'type'))
-                    ->paginate(6)
+                    ->paginate(8)
                     ->transform(function($r) { 
                         return [
                             'id'         => $r->id,
@@ -43,6 +43,36 @@ class RoomController extends Controller
                 'total'          => $rooms->total(),
                 'last'           => $rooms->lastPage()
             ], 200);
+    }
+
+    /**
+     * Toggle Room 
+     * 
+    */
+    public function toggle(Room $room)
+    {
+        $this->authenticated()->joinedRooms()->toggle($room);
+
+        return response()->json([
+            'users'   => $room->joinedByUsers()->get()
+        ], 200);
+    }
+
+    /**
+     * Get the Specific room
+     * 
+    */
+    public function show(Room $room)
+    {
+        $joined   = $room->joinedByUsers()
+                        ->where('user_id', $this->authenticated()->id)
+                        ->exists() ? true : false;
+        return response()->json([
+            'admin'             => $room->user,
+            'joined'            => $joined,
+            'joinedUsers'       => $room->joinedByUsers()->paginate(10)
+        ], 200);
+
     }
 
     /*

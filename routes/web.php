@@ -14,6 +14,7 @@ use App\Http\Controllers\User\RoomController;
 use App\Http\Controllers\User\MessageController;
 
 use App\Http\Controllers\User\Api\RoomController as ApiRoomController;
+use App\Http\Controllers\User\Api\RoomMessageController;
 
 Route::group(['middleware' => 'guest'], function(){
     Route::get('/', [WelcomeController::class, 'index'])
@@ -27,11 +28,19 @@ Route::group(['middleware' => 'guest'], function(){
 
 //Authenticated
 Route::group(['middleware' => ['auth', 'verified']], function(){
+
     //Account
     Route::get('/account', [AccountController::class, 'index'])
                                 ->name('account');
     Route::patch('/account/{user}', [AccountController::class, 'updateAccount']);
     Route::patch('/password/{user}', [AccountController::class, 'updatePassword']);
+
+    //Chat Page
+    Route::get('/chat', [RoomController::class, 'index'])
+                                ->name('chat');
+    Route::get('/chat/{room}', [ApiRoomController::class, 'show']);
+    Route::get('/chat/{room}/messages', [RoomMessageController::class, 'index']);
+
 
     Route::get('/dashboard', [DashboardController::class, 'index'])
                                 ->name('dashboard');
@@ -40,14 +49,12 @@ Route::group(['middleware' => ['auth', 'verified']], function(){
     Route::get('/messages', [MessageController::class, 'index']);
     Route::post('/messages', [MessageController::class, 'store']);
 
+
     //Room Api
     Route::get('/rooms', [ApiRoomController::class, 'index']);
     Route::post('/rooms', [RoomController::class, 'store']);
-    Route::get('/rooms/{room}', [RoomController::class, 'show'])
-                                ->name('room');
-    Route::patch('/rooms/{room}', [RoomController::class, 'toggle']);
 
-    
+    Route::patch('/rooms/{room}', [ApiRoomController::class, 'toggle']);  
 
 });
 
