@@ -47,35 +47,4 @@ class RoomController extends Controller
     }
 
 
-    /**
-     * Show the Specific room
-     * 
-    */
-    public function show(Room $room)
-    {
-        $auth     =  auth()->user();
-        $joined   = $room->joinedByUsers()
-                        ->where('user_id', auth()->user()->id)
-                        ->exists() ? true : false;
-        return Inertia::render('Room/Show', [
-            'authenicated'      => $auth,
-            'room'              => $room,
-            'admin'             => $room->user,
-            'joined'            => $joined,
-            'joinedUsers'       => $room->joinedByUsers()->paginate(1),
-            'messagesArray'     => $room->messages()
-                                    ->latest()
-                                    ->with('user')
-                                    ->paginate(10)
-                                    ->transform(function($m) {
-                                        return [
-                                            'id'         => $m->id,
-                                            'user'       => $m->user,
-                                            'content'    => $m->message,
-                                            'created'    => $m->created_at
-                                        ];
-                                    })
-        ]);
-
-    }
 }
