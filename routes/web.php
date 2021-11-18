@@ -52,7 +52,9 @@ Route::group(['middleware' => ['auth', 'verified']], function(){
     Route::get('/rooms/create', [RoomController::class, 'create'])
                                     ->name('new');
     Route::post('/rooms', [RoomController::class, 'store']);
-    Route::patch('/rooms/{room}', [ApiRoomController::class, 'toggle']);  
+    Route::patch('/rooms/{room}', [RoomController::class, 'update']);
+    Route::delete('/rooms/{room}', [RoomController::class, 'destroy']);
+    // Route::patch('/rooms/{room}', [ApiRoomController::class, 'toggle']);  
 
 
 });
