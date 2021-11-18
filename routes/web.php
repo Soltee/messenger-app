@@ -49,6 +49,8 @@ Route::group(['middleware' => ['auth', 'verified']], function(){
 
     //Room Api
     Route::get('/rooms', [ApiRoomController::class, 'index']);
+    Route::get('/rooms/create', [RoomController::class, 'create'])
+                                    ->name('new');
     Route::post('/rooms', [RoomController::class, 'store']);
     Route::patch('/rooms/{room}', [ApiRoomController::class, 'toggle']);  
 

@@ -22,7 +22,7 @@ class RoomMessageController extends Controller
             'messagesArray'     => $room->messages()
                                     ->latest()
                                     ->with('user')
-                                    ->paginate(6)
+                                    ->paginate(8)
                                     ->transform(function($m) {
                                         return [
                                             'id'         => $m->id,

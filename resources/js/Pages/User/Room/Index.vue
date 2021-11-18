@@ -251,7 +251,7 @@ export default {
             keyword       : '',
             loading       : false,
             err           : false,
-            roomsUrl      : '/rooms?search=&type=joined',
+            roomsUrl      : '/rooms',
             rooms         : [],
             nextPage      : '',   
 
@@ -368,6 +368,8 @@ export default {
 
                     this.nextPage  = res.data.next;
                     this.roomsUrl  = this.nextPage;
+                    this.selectRoom(this.rooms[0].id);
+                    this.setUpEcho();
                 }
             }).catch(err => {
                 this.loading  = false;

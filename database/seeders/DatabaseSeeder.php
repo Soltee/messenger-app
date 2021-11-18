@@ -16,8 +16,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
-
         \App\Models\User::factory(70)->create();
         $u  = \App\Models\User::factory()->create([
             'name'      => 'Test',
@@ -34,7 +32,9 @@ class DatabaseSeeder extends Seeder
             'remember_token'    => Str::random(10),
         ]);
 
-        \App\Models\Room::factory(100)->create();
+        \App\Models\Room::factory(40)->create();
+        \App\Models\Room::factory(40)->create(['user_id' => $u->id]);
+
         \App\Models\Message::factory(200)->create();
         \App\Models\Message::factory(50)->create([
             'user_id'   => $u->id
@@ -44,28 +44,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         //Rooms & Users
-        // for ($i=1; $i < 100; $i++) { 
-         
-        //     $user = \App\Models\User::where('id', '!=', $u->id)
-        //                                 ->inRandomOrder()
-        //                                 ->pluck('id')->toArray();
-        //     $room = \App\Models\Room::inRandomOrder()->pluck('id')->toArray();
-        //     DB::table('room_user')->insert(
-        //         [
-        //             'user_id'  => Arr::random($user),
-        //             'room_id'  => Arr::random($room),
-        //         ]);
-        //     // code...
-        // }
-        // for ($i=1; $i < 10; $i++) { 
-        //     // code...
-        //     $room = \App\Models\Room::inRandomOrder()->pluck('id')->toArray();
-        //     DB::table('room_user')->insert(
-        //         [
-        //             'user_id'  => $u->id,
-        //             'room_id'  => Arr::random($room),
-        //         ]);
-        // }
+        
         for ($i=1; $i < 10; $i++) { 
             // code...
             $room = \App\Models\Room::inRandomOrder()->pluck('id')->toArray();

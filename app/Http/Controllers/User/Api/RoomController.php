@@ -30,6 +30,7 @@ class RoomController extends Controller
                             'created'    => $r->created_at
                         ];             
                     });
+                    
         return response()->json([
                 'search'         => request()->search,
                 'type'           => request()->type,

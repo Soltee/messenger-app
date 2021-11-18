@@ -56,9 +56,11 @@ class AppServiceProvider extends ServiceProvider
                 {
                     return [
                         'data'  => $this->items->toArray(),
-                        'prev'  => $this->previousPageUrl(),
-                        'next'  => $this->nextPageUrl(),
+                        'prev'  => $this->appends(request()->only('search'))->previousPageUrl(),
+                        'next'  => $this->appends(request()->only('search'))->nextPageUrl(),
                         'links' => $this->links(),
+                        'first' => $this->firstItem(),
+                        'last'  => $this->lastItem(),
                         'total' => $this->total()
                     ];
                 }
