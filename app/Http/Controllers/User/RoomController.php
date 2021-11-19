@@ -12,19 +12,6 @@ use App\Models\User;
 
 class RoomController extends Controller
 {
-    /**
-     * Show All the Joined Rooms
-     * 
-    */
-    public function index()
-    {
-        $auth     =  auth()->user();
-
-        return Inertia::render('User/Room/Index', [
-            'authenicated'      => $auth            
-        ]);
-
-    }
 
     /**
      * Create Room Page

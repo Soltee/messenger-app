@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 use App\Http\Controllers\User\AccountController;
+use App\Http\Controllers\User\ChatController;
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\User\RoomController;
 
@@ -35,7 +36,7 @@ Route::group(['middleware' => ['auth', 'verified']], function(){
     Route::patch('/password/{user}', [AccountController::class, 'updatePassword']);
 
     //Chat Page
-    Route::get('/chat', [RoomController::class, 'index'])
+    Route::get('/chat', [ChatController::class, 'index'])
                                 ->name('chat');
     Route::get('/chat/{room}', [ApiRoomController::class, 'show']);
     Route::get('/chat/{room}/messages', [RoomMessageController::class, 'index']);
@@ -54,7 +55,7 @@ Route::group(['middleware' => ['auth', 'verified']], function(){
     Route::post('/rooms', [RoomController::class, 'store']);
     Route::patch('/rooms/{room}', [RoomController::class, 'update']);
     Route::delete('/rooms/{room}', [RoomController::class, 'destroy']);
-    // Route::patch('/rooms/{room}', [ApiRoomController::class, 'toggle']);  
+    Route::patch('/{room}', [ApiRoomController::class, 'toggle']);  
 
 
 });
