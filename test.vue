@@ -1004,3 +1004,138 @@
             </div>
 
     </div>
+
+
+<!-- Dashboard Old -->
+ <template #tab>
+            <div class="w-32 h-full  py-6">
+   
+                <div class="h-full flex flex-col bg-white w-full">
+                    
+                    <li 
+                        @click="selectTab('rooms');"
+                        class=" w-full py-2 group text-lg font-semibold flex text-gray-400 border-r-2 border-gray-300 mb-3 hover:border-gray-900 cursor-pointer w-full"
+                        :class="isRooms">
+                       
+                        <span 
+                            class=" px-4 transition group-hover:text-gray-900"
+                            :class="{ '': isRooms }">Rooms</span>
+                    </li>
+                    
+                </div>
+
+            </div>
+
+            <!-- -->
+            <div
+                class="bg-blue-100 w-72 h-full">
+                <div
+                    class="h-full flex flex-col bg-white shadow-xl ">
+                    
+                    <div 
+                        v-if="select === 'rooms'"
+                        class="border-b border-gray-200 px-4 pt-4 shadow-xl">
+                        <!-- Search -->
+                            <div class="flex items-center relative mb-3">
+                                <svg 
+                                    @click="reset()"
+                                    class="feather h-6 w-6 cursor-pointer absolute right-0 left-0 mt-0 ml-1 text-gray-900 hover:opacity-50"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                <BreezeInput 
+                                    id="keyword" type="text" 
+                                    class="bg-white rounded-lg shadow-md text-gray-900 block w-full pl-8 py-2 focus:border-transparent focus:border-none focus:ring-0  focus:outline-none opacity-1" 
+                                    v-model="keyword"  autofocus autocomplete="keyword" 
+                                    placeholder="Search rooms.."/>
+                        
+
+                            </div>
+                            
+                            <div class="flex items-center mt-2 overflow-x-auto">
+                                
+
+                                <li 
+                                    @click="type = 'joined'"
+                                    class="mr-3  w-auto py-2 group text-lg font-semibold flex text-gray-300 border-b-2 border-transparent hover:border-gray-900 cursor-pointer w-full"
+                                    :class="isJoined">
+                                   
+                                    <span 
+                                        class="ml-3  transition group-hover:text-gray-900"
+                                        :class="{ '': isJoined }">Joined</span>
+                                </li>
+                                <li 
+                                    @click="type = 'available'"
+
+                                    class="py-2 group text-lg font-semibold flex text-gray-300 border-b-2 border-transparent hover:border-gray-900 cursor-pointer w-full"
+                                    :class="isAvailable">
+                                   
+                                    <span 
+                                        class="ml-3  transition group-hover:text-gray-900"
+                                        :class="{ '': isAvailable }"
+                                        >Browse</span>
+                                </li>
+
+                                <li 
+                                    class="list-none">
+                                    <span class="py-2 ">{{ rooms.total }}</span>
+                                </li>
+
+                            </div>
+                    
+                    </div>
+
+                    <!-- Rooms -->
+                    <div
+                        ref="roomsDiv"
+                        id="roomsDiv"
+                        class="flex-1 overflow-y-auto px-4">
+                        
+                        <div class="">
+                            <div class="flow-root">
+                                <ul role="list" class="divide-y divide-gray-200">
+                                    <li 
+                                        v-for="room in rooms"
+                                        class="py-6 flex">
+
+                                        <!-- <div class="flex-shrink-0 w-12 h-12 border border-gray-200 rounded-md overflow-hidden">
+                                            <img 
+                                            :src="`https://ui-avatars.com/api/?name=${room.user.name}&background=fff&color=3857fe`" 
+                                            alt="Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt." 
+                                            class="w-full h-full object-center object-cover">
+                                        </div> -->
+                                        <!-- {{room}} -->
+                                        <div class="ml-4 flex-1 flex justify-between">
+                                            <div class="flex flex-col">
+                                                <h1 class="text-lg text-gray-900">
+                                                    {{ limit(room.name, 12) }}
+                                                </h1>
+                                                <span class="text-xs text-gray-900 -mt-1">{{ format(room.created) }}</span>
+                                            </div>
+                                            <div class="flex flex-col items-end">
+                                                <span class="text-md text-gray-900">Joined</span>
+                                                <span class="text-xs font-medium text-gray-900">{{ room.users }}</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    
+                                   
+                                </ul>
+                            </div>
+
+                            <div v-if="loading"
+                                class="flex justify-center items-center my-3">
+                                <svg 
+                                    
+                                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin: auto;  none repeat scroll 0% 0%; display: block; shape-rendering: auto; padding:0;" width="36px" height="36px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+                                    <circle cx="50" cy="50" fill="none" stroke="#526cfe" stroke-width="10" r="35" stroke-dasharray="164.93361431346415 56.97787143782138">
+                                      <animateTransform attributeName="transform" type="rotate" repeatCount="indefinite" dur="1s" values="0 50 50;360 50 50" keyTimes="0;1"></animateTransform>
+                                    </circle>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+        </template>
