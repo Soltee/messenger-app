@@ -13,8 +13,7 @@
 - Email : test@example.com
 - Pass  : password
 
-
-![](https://raw.githubusercontent.com/soltee/messenger-app/master/public/Imessage.mov)
+![caption](https://raw.githubusercontent.com/soltee/messenger-app/master/public/about.gif)
 
 
 ## Screenshots 
