@@ -17,14 +17,13 @@ class DashboardController extends Controller
     {
         $auth                = auth()->user();
 
-        $joinedRooms         = $auth->joinedRooms->take(5);
+        $joinedRooms         = $auth->joinedRooms->take(5)->sortDesc();;
         $joinedRoomsTotal    = $auth->joinedRooms->count();
-        $createdRooms        = $auth->rooms->take(5);
+        $createdRooms        = $auth->rooms->take(5)->sortDesc();
         $createdRoomsTotal   = $auth->rooms->count();
-        $messages            = $auth->messages->take(5);
+        $messages            = $auth->messages->take(5)->sortDesc();;
         $messagesTotal       = $auth->messages->count();
 
-        // dd($createdRooms);
 
         return Inertia::render('User/Dashboard', [
             'authenicated'         => $auth,

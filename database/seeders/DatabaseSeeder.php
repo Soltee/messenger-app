@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\User::factory(70)->create();
+        \App\Models\User::factory(10)->create();
         $u  = \App\Models\User::factory()->create([
             'name'      => 'Test',
             'email'     => 'test@example.com',
@@ -32,10 +32,10 @@ class DatabaseSeeder extends Seeder
             'remember_token'    => Str::random(10),
         ]);
 
-        \App\Models\Room::factory(40)->create();
-        \App\Models\Room::factory(40)->create(['user_id' => $u->id]);
+        \App\Models\Room::factory(12)->create();
+        \App\Models\Room::factory(3)->create(['user_id' => $u->id]);
 
-        \App\Models\Message::factory(200)->create();
+        \App\Models\Message::factory(20)->create();
         \App\Models\Message::factory(50)->create([
             'user_id'   => $u->id
         ]);
