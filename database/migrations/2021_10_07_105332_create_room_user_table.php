@@ -17,7 +17,6 @@ class CreateRoomUserTable extends Migration
             $table->id();
             $table->foreignId('room_id')->constrained();
             $table->foreignId('user_id')->constrained();
-            $table->foreign('room_id')->references('id')->on('rooms')->onDelete('cascade');
             $table->timestamps();
         });
     }
