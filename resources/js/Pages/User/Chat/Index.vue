@@ -380,6 +380,8 @@ export default {
 
         getSelectedRoom(){
 
+            this.setUpEcho();
+
             axios.get(`${this.selectedJoinedUsersUrl}`)
             .then(res => {
                 this.loading  = false;
@@ -388,7 +390,6 @@ export default {
                     this.joinedSelectedRoom         = res.data.joined;
                     this.selectedCreatedUser        = res.data.admin;
 
-                    this.setUpEcho();
 
                     if(this.selectedJoinedUsers.nextPage){
                         res.data.joinedUsers.data.forEach((u) => {

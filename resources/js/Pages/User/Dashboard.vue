@@ -59,7 +59,7 @@
                 <div 
                     v-for="message in messages"
                     class="mt-3 flex flex-col mb-3">
-                    <h2 class="text-semibold text-lg">{{message.message}}</h2>
+                    <h2 class="text-semibold text-lg">{{ limit(message.message) }}</h2>
                     <span class="text-xs -mt-1">{{ format(message.created_at) }}</span>
                 </div>
             </div>

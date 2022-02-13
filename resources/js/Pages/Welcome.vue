@@ -278,8 +278,8 @@ export default {
             formStatus : false,
             processing :false,
             loginForm  : {
-                email    : '',
-                password : '',
+                email    : 'test@example.com',
+                password : 'password',
                 remember : false,
             },
             signupForm : {
